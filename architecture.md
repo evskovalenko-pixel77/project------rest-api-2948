@@ -1,5 +1,7 @@
 # Architecture
-## Stack: Python FastAPI + SQLite
+## Stack: Python FastAPI + SQLite + JWT Authentication
 ## Modules
-- auth: registration and login (JWT)
-- tasks: CRUD operations for tasks
+- auth: user registration and login, JWT token generation/validation
+- tasks: CRUD operations for todo items (create, list, update, delete)
+- database: SQLite connection and migrations using Alembic
+- tests: unit and integration tests for all endpoints

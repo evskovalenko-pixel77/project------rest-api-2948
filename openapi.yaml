@@ -1,39 +1,94 @@
 openapi: 3.0.0
 info:
-  title: To-Do Task API
+  title: Todo API
   version: 1.0.0
 paths:
-  /register:
+  /api/auth/register:
     post:
       summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
       responses:
         '201':
           description: User created
-  /login:
+        '400':
+          description: Invalid input
+  /api/auth/login:
     post:
-      summary: Authenticate and get JWT token
+      summary: Login and obtain JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
       responses:
         '200':
-          description: Token returned
-  /tasks:
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token: {type: string}
+                  token_type: {type: string}
+  /api/tasks:
     get:
       summary: List all tasks for authenticated user
+      security:
+        - BearerAuth: []
       responses:
         '200':
           description: List of tasks
     post:
       summary: Create a new task
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: {type: string}
+                description: {type: string}
       responses:
         '201':
           description: Task created
-  /tasks/{task_id}:
+  /api/tasks/{task_id}:
     put:
-      summary: Update a task
+      summary: Update a task (mark as completed)
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                completed: {type: boolean}
       responses:
         '200':
           description: Task updated
     delete:
       summary: Delete a task
+      security:
+        - BearerAuth: []
       responses:
         '204':
           description: Task deleted
