@@ -1,0 +1,6 @@
+- As a user, I want to register an account so that I can manage my tasks securely
+- As a user, I want to log in to obtain a JWT token so that I can authenticate my requests
+- As a user, I want to create a new task with a title and optional description so that I can keep track of things to do
+- As a user, I want to view all my tasks so that I can see my to-do list
+- As a user, I want to update a task's title, description, or completion status so that I can keep it accurate
+- As a user, I want to delete a task so that I can remove tasks I no longer need

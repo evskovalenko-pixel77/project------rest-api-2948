@@ -1,0 +1,39 @@
+openapi: 3.0.0
+info:
+  title: To-Do Task API
+  version: 1.0.0
+paths:
+  /register:
+    post:
+      summary: Register a new user
+      responses:
+        '201':
+          description: User created
+  /login:
+    post:
+      summary: Authenticate and get JWT token
+      responses:
+        '200':
+          description: Token returned
+  /tasks:
+    get:
+      summary: List all tasks for authenticated user
+      responses:
+        '200':
+          description: List of tasks
+    post:
+      summary: Create a new task
+      responses:
+        '201':
+          description: Task created
+  /tasks/{task_id}:
+    put:
+      summary: Update a task
+      responses:
+        '200':
+          description: Task updated
+    delete:
+      summary: Delete a task
+      responses:
+        '204':
+          description: Task deleted
