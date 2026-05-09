@@ -1,33 +1,19 @@
-# Todo API
+# Personal Task Manager API
 
-A RESTful API for managing personal todo tasks with JWT authentication.
-
-## Stack
-- Python FastAPI
-- SQLite (via SQLAlchemy)
-- JWT Authentication
+## Description
+A REST API for managing personal tasks with user authentication and task CRUD operations.
 
 ## Quick Start
 
-1. Clone the repository
-2. Build and run using Docker Compose:
-
 bash
-docker-compose up --build
+docker-compose up
 
-
-3. API will be available at http://localhost:8000
 
 ## API Docs
 
-Swagger UI: http://localhost:8000/docs
-ReDoc: http://localhost:8000/redoc
+Open http://localhost:8000/docs
 
-## Endpoints
+## Test
 
-- `POST /auth/register` - Register a new user
-- `POST /auth/login` - Login and get JWT token
-- `GET /tasks` - List all tasks for the authenticated user
-- `POST /tasks` - Create a new task
-- `PUT /tasks/{id}` - Update a task (e.g., mark completed)
-- `DELETE /tasks/{id}` - Delete a task
+bash
+docker-compose run app pytest

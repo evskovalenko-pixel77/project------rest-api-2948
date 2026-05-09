@@ -1,9 +1,17 @@
 openapi: 3.0.0
 info:
-  title: Todo API
+  title: Task Manager API
   version: 1.0.0
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
 paths:
-  /api/auth/register:
+  /register:
     post:
       summary: Register a new user
       requestBody:
@@ -15,16 +23,20 @@ paths:
               properties:
                 email:
                   type: string
+                  format: email
                 password:
                   type: string
+              required:
+                - email
+                - password
       responses:
         '201':
           description: User created
         '400':
           description: Invalid input
-  /api/auth/login:
+  /login:
     post:
-      summary: Login and obtain JWT token
+      summary: Login and get JWT token
       requestBody:
         required: true
         content:
@@ -36,28 +48,22 @@ paths:
                   type: string
                 password:
                   type: string
+              required:
+                - email
+                - password
       responses:
         '200':
-          description: Successful login
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  access_token: {type: string}
-                  token_type: {type: string}
-  /api/tasks:
+          description: Login successful, returns token
+        '401':
+          description: Invalid credentials
+  /tasks:
     get:
-      summary: List all tasks for authenticated user
-      security:
-        - BearerAuth: []
+      summary: List all tasks for the authenticated user
       responses:
         '200':
-          description: List of tasks
+          description: A list of tasks
     post:
       summary: Create a new task
-      security:
-        - BearerAuth: []
       requestBody:
         required: true
         content:
@@ -65,30 +71,70 @@ paths:
             schema:
               type: object
               properties:
-                title: {type: string}
-                description: {type: string}
+                title:
+                  type: string
+                description:
+                  type: string
+                due_date:
+                  type: string
+                  format: date
+              required:
+                - title
       responses:
         '201':
           description: Task created
-  /api/tasks/{task_id}:
+  /tasks/{task_id}:
+    get:
+      summary: Get a task by ID
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Task details
+        '404':
+          description: Task not found
     put:
-      summary: Update a task (mark as completed)
-      security:
-        - BearerAuth: []
+      summary: Update a task (mark completed, edit fields)
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: integer
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                completed: {type: boolean}
+                title:
+                  type: string
+                description:
+                  type: string
+                due_date:
+                  type: string
+                  format: date
+                completed:
+                  type: boolean
       responses:
         '200':
           description: Task updated
+        '404':
+          description: Task not found
     delete:
       summary: Delete a task
-      security:
-        - BearerAuth: []
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: integer
       responses:
         '204':
           description: Task deleted
+        '404':
+          description: Task not found
