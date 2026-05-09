@@ -1,15 +1,7 @@
 openapi: 3.0.0
 info:
-  title: Task Manager API
+  title: Todo API
   version: 1.0.0
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-security:
-  - bearerAuth: []
 paths:
   /register:
     post:
@@ -23,17 +15,11 @@ paths:
               properties:
                 email:
                   type: string
-                  format: email
                 password:
                   type: string
-              required:
-                - email
-                - password
       responses:
-        '201':
-          description: User created
-        '400':
-          description: Invalid input
+        '200':
+          description: User registered
   /login:
     post:
       summary: Login and get JWT token
@@ -48,22 +34,21 @@ paths:
                   type: string
                 password:
                   type: string
-              required:
-                - email
-                - password
       responses:
         '200':
-          description: Login successful, returns token
-        '401':
-          description: Invalid credentials
+          description: JWT token
   /tasks:
     get:
-      summary: List all tasks for the authenticated user
+      summary: List all tasks for authenticated user
+      security:
+        - bearerAuth: []
       responses:
         '200':
-          description: A list of tasks
+          description: List of tasks
     post:
       summary: Create a new task
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -75,30 +60,14 @@ paths:
                   type: string
                 description:
                   type: string
-                due_date:
-                  type: string
-                  format: date
-              required:
-                - title
-      responses:
-        '201':
-          description: Task created
-  /tasks/{task_id}:
-    get:
-      summary: Get a task by ID
-      parameters:
-        - name: task_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
-          description: Task details
-        '404':
-          description: Task not found
+          description: Task created
+  /tasks/{task_id}:
     put:
-      summary: Update a task (mark completed, edit fields)
+      summary: Update a task
+      security:
+        - bearerAuth: []
       parameters:
         - name: task_id
           in: path
@@ -113,20 +82,15 @@ paths:
               properties:
                 title:
                   type: string
-                description:
-                  type: string
-                due_date:
-                  type: string
-                  format: date
                 completed:
                   type: boolean
       responses:
         '200':
           description: Task updated
-        '404':
-          description: Task not found
     delete:
       summary: Delete a task
+      security:
+        - bearerAuth: []
       parameters:
         - name: task_id
           in: path
@@ -134,7 +98,11 @@ paths:
           schema:
             type: integer
       responses:
-        '204':
+        '200':
           description: Task deleted
-        '404':
-          description: Task not found
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
